@@ -15,24 +15,24 @@ export class Animal extends Entity {
     const tex = Texture.from(ASSETS.sheep)
     if (tex) {
       const spr = new Sprite({ texture: tex })
-      const scale = (radius * 2) / Math.max(spr.width, spr.height)
+      const scale = (this.radius * 2) / Math.max(spr.width, spr.height)
       spr.scale.set(scale)
       spr.anchor.set(0.5)
       this.body = spr
     } else {
       const g = new Graphics()
       // legs
-      g.circle(-radius * 0.5, -radius * 0.6, radius * 0.18).fill(COLORS.animalLeg)
-      g.circle(radius * 0.5, -radius * 0.6, radius * 0.18).fill(COLORS.animalLeg)
-      g.circle(-radius * 0.5, radius * 0.6, radius * 0.18).fill(COLORS.animalLeg)
-      g.circle(radius * 0.5, radius * 0.6, radius * 0.18).fill(COLORS.animalLeg)
+      g.circle(-this.radius * 0.5, -this.radius * 0.6, this.radius * 0.18).fill(COLORS.animalLeg)
+      g.circle(this.radius * 0.5, -this.radius * 0.6, this.radius * 0.18).fill(COLORS.animalLeg)
+      g.circle(-this.radius * 0.5, this.radius * 0.6, this.radius * 0.18).fill(COLORS.animalLeg)
+      g.circle(this.radius * 0.5, this.radius * 0.6, this.radius * 0.18).fill(COLORS.animalLeg)
       // body
-      g.ellipse(0, 0, radius * 0.9, radius * 1.2).fill(COLORS.animal)
+      g.ellipse(0, 0, this.radius * 0.9, this.radius * 1.2).fill(COLORS.animal)
       // head
-      g.circle(radius * 0.9, 0, radius * 0.55).fill(COLORS.animalHead)
+      g.circle(this.radius * 0.9, 0, this.radius * 0.55).fill(COLORS.animalHead)
       // ears
-      g.circle(radius * 0.9 + radius * 0.4, -radius * 0.3, radius * 0.18).fill(COLORS.animalEar)
-      g.circle(radius * 0.9 + radius * 0.4, radius * 0.3, radius * 0.18).fill(COLORS.animalEar)
+      g.circle(this.radius * 0.9 + this.radius * 0.4, -this.radius * 0.3, this.radius * 0.18).fill(COLORS.animalEar)
+      g.circle(this.radius * 0.9 + this.radius * 0.4, this.radius * 0.3, this.radius * 0.18).fill(COLORS.animalEar)
       this.body = g
     }
     this.container.addChild(this.body)
