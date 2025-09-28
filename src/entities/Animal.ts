@@ -1,6 +1,6 @@
 import { Graphics, Sprite, Texture } from 'pixi.js'
 import { Entity } from './Entity.ts'
-import { ANIMAL, ASSETS, COLORS } from './config.ts'
+import { ANIMAL, ASSETS, COLORS } from '../services/Config.ts'
 
 export class Animal extends Entity {
   private body: Graphics | Sprite

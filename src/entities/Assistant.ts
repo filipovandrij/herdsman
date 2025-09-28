@@ -1,6 +1,6 @@
 import { Graphics, Sprite, Texture } from 'pixi.js'
 import { Entity } from './Entity.ts'
-import { ASSETS, ASSISTANT, COLORS } from './config.ts'
+import { ASSETS, ASSISTANT, COLORS } from '../services/Config.ts'
 
 type Vec2 = { x: number; y: number }
 

@@ -1,6 +1,6 @@
 import { Graphics, Sprite, Texture, type PointData } from 'pixi.js'
 import { Entity } from './Entity.ts'
-import { ASSETS, COLORS, PLAYER } from './config.ts'
+import { ASSETS, COLORS, PLAYER } from '../services/Config.ts'
 
 export class Player extends Entity {
   private body: Graphics | Sprite

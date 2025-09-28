@@ -1,5 +1,5 @@
 import { Container, Graphics, Text } from 'pixi.js'
-import { COLORS, UI, UPGRADES } from './config.ts'
+import { UI, UPGRADES } from '../services/Config.ts'
 
 type ClickHandler = () => void
 
@@ -11,9 +11,11 @@ export class ShopUI {
   private btnCapacity: Graphics
   private btnScore: Graphics
   private btnAssistant: Graphics
+  private btnSpawn: Graphics
   private labelCapacity: Text
   private labelScore: Text
   private labelAssistant: Text
+  private labelSpawn: Text
   private scoreLabel: Text
 
   constructor(width: number, height: number) {
@@ -64,6 +66,11 @@ export class ShopUI {
     this.labelAssistant = this.createLabel(24, 204)
     this.container.addChild(this.btnAssistant, this.labelAssistant)
     this.attachButtonFX(this.btnAssistant, this.labelAssistant)
+
+    this.btnSpawn = this.createButton(16, 256, 360, 48, () => {})
+    this.labelSpawn = this.createLabel(24, 268)
+    this.container.addChild(this.btnSpawn, this.labelSpawn)
+    this.attachButtonFX(this.btnSpawn, this.labelSpawn)
   }
 
   private createButton(x: number, y: number, w: number, h: number, onClick: ClickHandler): Graphics {
@@ -81,7 +88,7 @@ export class ShopUI {
     return new Text({ text: '', style: { fill: 0xffffff, fontSize: UI.fontSize, fontFamily: 'Arial' }, x, y })
   }
 
-  updateLabels(capacityLevel: number, scorePerLevel: number, assistant: boolean, currentScore: number): void {
+  updateLabels(capacityLevel: number, scorePerLevel: number, assistant: boolean, currentScore: number, spawnLevel = 0): void {
     const nextCapIdx = Math.min(capacityLevel + 1, UPGRADES.capacityLevels.length - 1)
     const nextScoreIdx = Math.min(scorePerLevel + 1, UPGRADES.scorePerLevels.length - 1)
     const nextCapCost = UPGRADES.capacityCosts[nextCapIdx]
@@ -91,6 +98,9 @@ export class ShopUI {
     this.labelScore.text = `Score per sheep: ${UPGRADES.scorePerLevels[scorePerLevel]} → ${UPGRADES.scorePerLevels[nextScoreIdx]}  (cost: ${nextScoreCost})`
     this.labelAssistant.text = assistant ? `Assistant: hired` : `Hire assistant (cost: ${UPGRADES.assistantCost})`
     this.scoreLabel.text = `Score: ${currentScore}`
+    const nextSpawnIdx = Math.min(spawnLevel + 1, UPGRADES.spawnRateLevels.length - 1)
+    const nextSpawnCost = UPGRADES.spawnRateCosts[nextSpawnIdx]
+    this.labelSpawn.text = `Spawn rate: x${UPGRADES.spawnRateLevels[spawnLevel]} → x${UPGRADES.spawnRateLevels[nextSpawnIdx]}  (cost: ${nextSpawnCost})`
   }
 
   private attachButtonFX(btn: Graphics, label?: Text, extra?: Text): void {
@@ -130,13 +140,16 @@ export class ShopUI {
     onBuyCapacity: ClickHandler,
     onBuyScore: ClickHandler,
     onHireAssistant: ClickHandler,
+    onBuySpawn: ClickHandler,
   ): void {
     this.btnCapacity.removeAllListeners()
     this.btnScore.removeAllListeners()
     this.btnAssistant.removeAllListeners()
+    this.btnSpawn.removeAllListeners()
     this.btnCapacity.on('pointerdown', onBuyCapacity)
     this.btnScore.on('pointerdown', onBuyScore)
     this.btnAssistant.on('pointerdown', onHireAssistant)
+    this.btnSpawn.on('pointerdown', onBuySpawn)
   }
 }
 

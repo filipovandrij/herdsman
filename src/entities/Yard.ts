@@ -1,6 +1,6 @@
 import { Graphics, Sprite, Texture } from 'pixi.js'
 import { Entity } from './Entity.ts'
-import { ASSETS, COLORS } from './config.ts'
+import { ASSETS, COLORS } from '../services/Config.ts'
 
 export class Yard extends Entity {
   private body: Graphics | Sprite

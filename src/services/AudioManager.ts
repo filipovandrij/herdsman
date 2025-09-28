@@ -1,4 +1,4 @@
-import { ASSETS, AUDIO } from './config.ts'
+import { ASSETS, AUDIO } from './Config.ts'
 
 class AudioManagerImpl {
   private bgm: HTMLAudioElement | null = null

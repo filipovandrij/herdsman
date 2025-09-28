@@ -1,7 +1,7 @@
 import { Graphics, Text } from 'pixi.js'
-import { Entity } from './Entity.ts'
-import { COLORS, UI } from './config.ts'
-import { AudioManager } from './AudioManager.ts'
+import { Entity } from '../entities/Entity.ts'
+import { COLORS, UI } from '../services/Config.ts'
+import { AudioManager } from '../services/AudioManager.ts'
 
 export class ScoreUI extends Entity {
   private score: number

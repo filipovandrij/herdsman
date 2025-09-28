@@ -1,6 +1,6 @@
 import { Container, Graphics, Text } from 'pixi.js'
-import { UI } from './config.ts'
-import { AudioManager } from './AudioManager.ts'
+import { UI } from '../services/Config.ts'
+import { AudioManager } from '../services/AudioManager.ts'
 
 type ClickHandler = () => void
 

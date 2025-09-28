@@ -1,9 +1,9 @@
 import './style.css'
 import { Application } from 'pixi.js'
-import { Game } from './Game.ts'
-import { MainMenuUI } from './MainMenuUI.ts'
-import { AudioManager } from './AudioManager.ts'
-import { APP_HEIGHT, APP_WIDTH, COLORS, FULLSCREEN } from './config.ts'
+import { Game } from './core/Game.ts'
+import { MainMenuUI } from './ui/MainMenuUI.ts'
+import { AudioManager } from './services/AudioManager.ts'
+import { APP_HEIGHT, APP_WIDTH, COLORS, FULLSCREEN } from './services/Config.ts'
 
 const appRoot = document.querySelector<HTMLDivElement>('#app')!
 

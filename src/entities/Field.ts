@@ -1,6 +1,6 @@
 import { Graphics } from 'pixi.js'
 import { Entity } from './Entity.ts'
-import { COLORS } from './config.ts'
+import { COLORS } from '../services/Config.ts'
 
 export class Field extends Entity {
   constructor(width: number, height: number) {

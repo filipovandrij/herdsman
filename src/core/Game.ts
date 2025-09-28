@@ -1,13 +1,13 @@
 import { Application, Container, Assets, Sprite, Texture } from 'pixi.js'
-import { Player } from './Player.ts'
-import { Animal } from './Animal.ts'
-import { Yard } from './Yard.ts'
-import { ScoreUI } from './ScoreUI.ts'
-import { ANIMAL, APP_HEIGHT, APP_WIDTH, ASSETS, CAPTURE, FULLSCREEN, PLAYER, SHOP, SPAWN, UPGRADES, YARD } from './config.ts'
-import { AudioManager } from './AudioManager.ts'
-import { Field } from './Field.ts'
-import { ShopUI } from './ShopUI.ts'
-import { Assistant } from './Assistant.ts'
+import { Player } from '../entities/Player.ts'
+import { Animal } from '../entities/Animal.ts'
+import { Yard } from '../entities/Yard.ts'
+import { ScoreUI } from '../ui/ScoreUI.ts'
+import { ANIMAL, APP_HEIGHT, APP_WIDTH, ASSETS, CAPTURE, FULLSCREEN, PLAYER, SHOP, SPAWN, UPGRADES, YARD } from '../services/Config.ts'
+import { AudioManager } from '../services/AudioManager.ts'
+import { Field } from '../entities/Field.ts'
+import { ShopUI } from '../ui/ShopUI.ts'
+import { Assistant } from '../entities/Assistant.ts'
 
 export class Game {
   private app: Application
@@ -27,6 +27,7 @@ export class Game {
   private capacityLevel = 0
   private scorePerLevel = 0
   private assistant = false
+  private spawnRateLevel = 0
   private shopMarker!: Sprite
   private shopRect = { x: 0, y: 0, w: 0, h: 0 }
   private assistantEntity: Assistant | null = null
@@ -131,18 +132,17 @@ export class Game {
     // shop overlay
     this.shop = new ShopUI(width, height)
     this.stage.addChild(this.shop.container)
-    this.shop.updateLabels(this.capacityLevel, this.scorePerLevel, this.assistant, this.score)
+    this.shop.updateLabels(this.capacityLevel, this.scorePerLevel, this.assistant, this.score, this.spawnRateLevel)
     this.shop.bind(
       () => this.buyCapacity(),
       () => this.buyScorePer(),
       () => this.hireAssistant(),
+      () => this.buySpawnRate(),
     )
 
     window.addEventListener('keydown', (e) => {
       if (e.code === 'KeyM') {
         this.shop.container.visible = !this.shop.container.visible
-      } else if (e.code === 'KeyB') {
-        AudioManager.toggleMute()
       }
     })
     // bgm is handled by AudioManager now
@@ -253,7 +253,9 @@ export class Game {
     this.spawnTimer += dt
     if (this.spawnTimer >= this.nextSpawnIn && this.animals.length < SPAWN.limit) {
       this.spawnTimer = 0
-      this.nextSpawnIn = this.randomSpawnInterval()
+      // apply spawn rate multiplier (higher = faster spawns)
+      const mult = UPGRADES.spawnRateLevels[this.spawnRateLevel] ?? 1
+      this.nextSpawnIn = this.randomSpawnInterval() / mult
       const { x, y } = this.randomSpawnPoint()
       const a = new Animal(ANIMAL.radius)
       a.container.position.set(x, y)
@@ -339,7 +341,7 @@ export class Game {
     if (!this.canAfford(cost)) return
     this.spend(cost)
     this.capacityLevel = next
-    this.shop.updateLabels(this.capacityLevel, this.scorePerLevel, this.assistant, this.score)
+    this.shop.updateLabels(this.capacityLevel, this.scorePerLevel, this.assistant, this.score, this.spawnRateLevel)
   }
 
   private buyScorePer(): void {
@@ -349,7 +351,17 @@ export class Game {
     if (!this.canAfford(cost)) return
     this.spend(cost)
     this.scorePerLevel = next
-    this.shop.updateLabels(this.capacityLevel, this.scorePerLevel, this.assistant, this.score)
+    this.shop.updateLabels(this.capacityLevel, this.scorePerLevel, this.assistant, this.score, this.spawnRateLevel)
+  }
+
+  private buySpawnRate(): void {
+    const next = Math.min(this.spawnRateLevel + 1, UPGRADES.spawnRateLevels.length - 1)
+    if (next === this.spawnRateLevel) return
+    const cost = UPGRADES.spawnRateCosts[next]
+    if (!this.canAfford(cost)) return
+    this.spend(cost)
+    this.spawnRateLevel = next
+    this.shop.updateLabels(this.capacityLevel, this.scorePerLevel, this.assistant, this.score, this.spawnRateLevel)
   }
 
   private hireAssistant(): void {

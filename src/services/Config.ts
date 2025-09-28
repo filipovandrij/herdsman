@@ -59,6 +59,9 @@ export const UPGRADES = {
   capacityCosts: [0, 5, 10, 25],
   scorePerLevels: [1, 2, 3, 5],
   scorePerCosts: [0, 5, 10, 25],
+  // Sheep spawn rate multiplier (applies as: baseInterval / multiplier)
+  spawnRateLevels: [1, 1.5, 2],
+  spawnRateCosts: [0, 10, 25],
   assistantCost: 50,
 } as const
 
